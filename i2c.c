@@ -10,7 +10,7 @@ void i2cInit(void){
 
 void i2cStart(void){
 	//clearing interrupt flag, generate start condition, enable twi operation
-	TWCR=0b10100100;
+	TWCR=(1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
 	//waiting for interrupt flag to set
 	while(!(TWCR & (1<<TWINT)));
 	//checking status register
@@ -59,7 +59,7 @@ unsigned char eepromRandomRead(void){
 	/*returns the data stored in EEPROM at the prev sent address
 	*/
 	//sending repeated start condition
-	TWCR=0b10100100;      
+	TWCR=(1<<TWINT)|(1<<TWSTA)|(1<<TWEN);      
 	//waiting for flag to set
 	while(!(TWCR & (1<<TWINT)));
 	//checking status register
@@ -87,5 +87,5 @@ unsigned char eepromRandomRead(void){
 
 void i2cStop(void){
 	//sending stop conditon
-	TWCR=0b10010100;
+	TWCR=(1<<TWINT)|(1<<TWSTO)|(1<<TWEN);
 }
