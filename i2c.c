@@ -1,3 +1,5 @@
+#include "i2c.h"
+
 void i2cInit(void){
 	//setting division factor for SCL to 32
 	TWBR=0x20;
@@ -12,7 +14,7 @@ void i2cStart(void){
 	//waiting for interrupt flag to set
 	while(!(TWCR & (1<<TWINT)));
 	//checking status register
-	while((TWSR & 0xF8)!= 0x08);
+	while((TWSR & MASK)!= START);
 }
 
 void eepromWr(void){
@@ -23,7 +25,7 @@ void eepromWr(void){
 	//wait for flag to set
 	while (!(TWCR & (1<<TWINT)));
 	//check status register
-	while( (TWSR & 0xF8) != 0x18);
+	while( (TWSR & MASK) != SLA+W_ACK);
 }
 
 void address(uint8_t addrs){
@@ -37,7 +39,7 @@ void address(uint8_t addrs){
 	//wait for flag to set
 	while (!(TWCR & (1<<TWINT)));
 	//check status register
-	while( (TWSR & 0xF8) != 0x28);
+	while( (TWSR & MASK) != DATA_SENT_ACK);
 }
 
 void eepromWrite(unsigned char data){
@@ -48,7 +50,7 @@ void eepromWrite(unsigned char data){
 	//wait for flag to set
 	while (!(TWCR & (1<<TWINT)));
 	//check status register
-	while( (TWSR & 0xF8) != 0x28);
+	while( (TWSR & MASK) != DATA_SENT_ACK);
 	//increment add for next write operation
 	add+=0x01;
 }
@@ -61,7 +63,7 @@ unsigned char eepromRandomRead(void){
 	//waiting for flag to set
 	while(!(TWCR & (1<<TWINT)));
 	//checking status register
-	while((TWSR & 0xF8)!= 0x10);
+	while((TWSR & MASK)!= REPEATED_START);
 	
 	//loading SLA+R
 	TWDR=0b10100001; 
@@ -70,14 +72,14 @@ unsigned char eepromRandomRead(void){
 	//waiting for flag to set
 	while (!(TWCR & (1<<TWINT)));
 	//check status register
-	while( (TWSR & 0xF8) != 0x40);
+	while( (TWSR & MASK) != SLA+R_ACK);
 	
 	// TWEA not set as we have to send nack
 	TWCR = (1<<TWINT)|(1<<TWEN);  
 	//waiting for flag to set
 	while (!(TWCR & (1<<TWINT)));
 	//check status register
-	while(((TWSR & 0xF8)!=0x58));
+	while(((TWSR & MASK)!=DATA_REC_NACK));
 	
 	return(TWDR);
 }
