@@ -8,13 +8,13 @@ int times=0;
 int repeat=0;
 uint8_t temp = 0x00;
 
-#include "timer.c"
-#include "interrupt.c"
-#include "adc.c"
-#include "i2c.c"
-#include "usart.c"
-#include "spi.c"
-#include "hmData.c"
+#include "timer.h"
+#include "interrupt.h"
+#include "adc.h"
+#include "i2c.h"
+#include "usart.h"
+#include "spi.h"
+#include "hmData.h"
 
 int main(void){
   initInterrupt();
