@@ -1,6 +1,4 @@
-/*
-*
-*/
+#include "usart.h"
 
 void uartInit (void){
 	//setting baud rate to 9600
