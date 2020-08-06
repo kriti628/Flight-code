@@ -1,6 +1,8 @@
+#include "spi.h"
+
 void spiInit(void){
 	//set MISO as output
-	DDRB = (1<<3);
+	DDRB = (1<<MISO);
 	//enable SPI and SPI interrupt
 	SPCR |=(1<<SPIE)|(1<<SPE);
 }
