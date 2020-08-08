@@ -25,7 +25,7 @@ void eepromWr(void){
 	//wait for flag to set
 	while (!(TWCR & (1<<TWINT)));
 	//check status register
-	while( (TWSR & MASK) != SLA+W_ACK);
+	while( (TWSR & MASK) != SLA_W_ACK);
 }
 
 void address(uint8_t addrs){
@@ -72,7 +72,7 @@ unsigned char eepromRandomRead(void){
 	//waiting for flag to set
 	while (!(TWCR & (1<<TWINT)));
 	//check status register
-	while( (TWSR & MASK) != SLA+R_ACK);
+	while( (TWSR & MASK) != SLA_R_ACK);
 	
 	// TWEA not set as we have to send nack
 	TWCR = (1<<TWINT)|(1<<TWEN);  
