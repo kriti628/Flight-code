@@ -4,10 +4,10 @@
 #define MASK 0xF8
 #define START 0x08
 #define REPEATED_START 0x10
-#define SLA+W_ACK 0x18
-#define SLA+W_NACK 0x20
-#define SLA+R_ACK 0x40
-#define SLA+R_ACK 0x48
+#define SLA_W_ACK 0x18
+#define SLA_W_NACK 0x20
+#define SLA_R_ACK 0x40
+#define SLA_R_ACK 0x48
 #define DATA_SENT_ACK 0x28
 #define DATA_SENT_NACK 0x30
 #define DATA_REC_ACK 0x50
