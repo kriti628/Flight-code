@@ -1,3 +1,5 @@
+#include "interrupt.h"
+
 void initInterrupt(void){
 	//setting to generate interrupt request at rising edge
 	EICRA = (1<<ISC20)|(1<<ISC21)|(1<<ISC30)|(1<<ISC31);
