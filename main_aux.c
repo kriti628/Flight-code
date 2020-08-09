@@ -1,5 +1,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 uint8_t hmData[18];
 volatile uint8_t count;
@@ -22,12 +23,15 @@ int main(void){
   while(1){
     switch(opMode){
     case KILL:
+	_delay_ms(10);
     break;
     
     case RESTART:
+	_delay_ms(10);
     break;
     
     case EMERGENCY:
+	_delay_ms(10);	    
     break;
     
     case INITIAL:
@@ -52,38 +56,27 @@ int main(void){
 return 0;
 }
 
-ISR(SPI_STC_vect)
-{	
+ISR(SPI_STC_vect){
+	command = SPDR;
 	/*this is the interrrupt for SPI communication from the PS4 OP microcontroller, switch statement is used to store the data in different variables*/
-	switch(times)
-	{
-		//cases 0-4 is getting operational mode and timestamp from PS4 OP microcontroller
-		case 0 :
-		hmData[4]=SPDR;
-		times++;
+	switch(command){
+		case kill:
+		opMode = KILL;
 		break;
 			
-		case 1 :
-		hmData[0]=SPDR;
-		times++;
+		case emergency:
+		opMode = EMERGENCY;
 		break;
 			
-		case 2 :
-		hmData[1]=SPDR;
-		times++;
+		case restart:
+		opMode = RESTART;
 		break;
 			
-		case 3 :
-		hmData[2]=SPDR;
-		times++;
+		case deploy:
+		opMode = PREDEPL;
 		break;
 			
-		case 4 :
-		hmData[3]=SPDR;
-		times++;
-		break;
-		//this case is for reading the HM data from the EEPROM and sending it to PS4 for telemetry	
-		case 5 :
+		case send_data:
 		i2cStart();
 		eepromWr();
 		address(0x00);
@@ -96,9 +89,33 @@ ISR(SPI_STC_vect)
 		else times = 5;
 		addr++;
 		break;
-		
+			
+		case hmdata:
+			switch(times){
+				case 0 :
+				hmData[0]=SPDR;
+				times++;
+				break;
+					
+				case 1 :
+				hmData[1]=SPDR;
+				times++;
+				break;
+			
+				case 2 :
+				hmData[2]=SPDR;
+				times++;
+				break;
+			
+				case 3 :
+				hmData[3]=SPDR;
+				times = 0;
+				break;
+			}
+		break;
+		}
 	}
-}
+		
 /*These are the external interrupts for various pin statuses that we are including in the HM data, that we are storing in variables*/
 ISR(TIMER1_COMPA_vect)
 {
