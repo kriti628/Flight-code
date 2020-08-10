@@ -1,3 +1,5 @@
+#include "hmData.h"
+
 void HMDataCheck(int freq){
 	//setting the pin status variables to their starting value
 	hmData[5]=0x00;
