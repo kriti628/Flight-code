@@ -1,3 +1,5 @@
+#include "adc.h"
+
 void adcInit(void){
 	//enabling ADC, setting frequency prescaler to 16
 	ADCSRA |= (1<<ADEN)|(1<<ADPS2);
