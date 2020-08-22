@@ -127,32 +127,4 @@ int main(void)
 		count++;
 	}
 
-	ISR(INT2_vect)
-	{
-		hmData[5] |= 0x30;
-	}
-
-	ISR(INT3_vect)
-	{
-		hmData[5] |= 0x03;
-	}
-
-	ISR(INT4_vect)
-	{
-		hmData[6] |= 0x30;
-	}
-
-	ISR(INT5_vect)
-	{
-		hmData[6] |= 0x03;
-	}
-
-	ISR(INT6_vect)
-	{
-		hmData[9] |= 0x30;
-	}
-
-	ISR(INT7_vect)
-	{
-		hmData[9] |= 0x03;
-	}
+	
