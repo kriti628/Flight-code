@@ -1,11 +1,12 @@
 #include "i2c.h"
+#include "avr_compiler.h"
 
-void i2cInit(void){
+void i2cInit(volatile uint8_t *add2){
 	//setting division factor for SCL to 32
 	TWBR=0x20;
 	//setting prescaler to 1
 	TWSR=0x00;
-	add=0x00;
+	*add2=0x00;
 }
 
 void i2cStart(void){
@@ -42,7 +43,7 @@ void address(uint8_t addrs){
 	while( (TWSR & MASK) != DATA_SENT_ACK);
 }
 
-void eepromWrite(unsigned char data){
+void eepromWrite(unsigned char data,volatile uint8_t *add3){
 	//load data into TWDR
 	TWDR=data;
 	//clear TWINT
@@ -52,7 +53,7 @@ void eepromWrite(unsigned char data){
 	//check status register
 	while( (TWSR & MASK) != DATA_SENT_ACK);
 	//increment add for next write operation
-	add+=0x01;
+	*add3+=0x01;
 }
 
 unsigned char eepromRandomRead(void){
