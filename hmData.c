@@ -31,11 +31,11 @@ void HMDataCheck(int freq, volatile uint8_t *hmData1, volatile int *count1, vola
 			//resetting the count variable and starting the i2c connection and sending the data to the EEPROM
 			*count1=0;
 			hmdata1 += 5;
-			if (DEPL1 == 1 && DEPL2 == 1) *hmdata1 = 0x33;
+			if (PE0 == 1 && PE1 == 1) *hmdata1 = 0x33;
 			hmdata++;
-			if (VOLT1 == 1 && VOLT2 == 1) *hmdata1 = 0x33;
+			if (PE2 == 1 && PE3 == 1) *hmdata1 = 0x33;
 			hmData1+=3;
-			if (CURR1 == 1 && CURR2 == 1) *hmdata1 = 0x33;
+			if (PE4 == 1 && PE5 == 1) *hmdata1 = 0x33;
 			hmData1-=9;
 			i2cStart();
 			eepromWr();
