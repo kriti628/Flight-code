@@ -42,19 +42,19 @@ int main(void)
 			break;
 			
 			case INITIAL:
-			HMDataCheck(60, &hmData,&count,&add,&opMode);
+			HMDataCheck(60, hmData,&count,&add,&opMode);
 			break;
 			
 			case PREDEPL:
-			HMDataCheck(2, &hmData,&count,&add,&opMode);
+			HMDataCheck(2, hmData,&count,&add,&opMode);
 			break;
 			
 			case POSTDEPL:
-			HMDataCheck(60, &hmData,&count,&add,&opMode);
+			HMDataCheck(60, hmData,&count,&add,&opMode);
 			break;
 			
 			case NOMINAL:
-			HMDataCheck(60, &hmData,&count,&add,&opMode);
+			HMDataCheck(60, hmData,&count,&add,&opMode);
 			break;
 		}
 	}
