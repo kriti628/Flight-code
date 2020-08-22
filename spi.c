@@ -1,4 +1,5 @@
 #include "spi.h"
+#include "avr_compiler.h"
 
 void spiInit(void){
 	//set MISO as output
