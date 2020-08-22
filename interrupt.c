@@ -1,4 +1,5 @@
 #include "interrupt.h"
+#include "avr_compiler.h"
 
 void initInterrupt(void){
 	//setting to generate interrupt request at rising edge
