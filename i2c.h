@@ -15,19 +15,12 @@
 #define DATA_REC_ACK 0x50
 #define DATA_REC_NACK 0x58
 #define ARBITRATION_LOST 0x38
-#define kill 0b00000011
-#define emergency 0b00000110
-#define restart 0b00001100
-#define deploy 0b00011000
-#define send_data 0b00110000
-#define hm_data 0b01100000
 
-
-void i2cInit(volatile uint8_t *add2);
+void i2cInit(void);
 void i2cStart(void);
 void eepromWr(void);
 void address(uint8_t addrs);
-void eepromWrite(unsigned char data,volatile uint8_t *add3);
+void eepromWrite(unsigned char data);
 unsigned char eepromRandomRead(void);
 void i2cStop(void);
 
