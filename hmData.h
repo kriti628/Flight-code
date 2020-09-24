@@ -11,6 +11,7 @@
 #define POSTDEPL 0b00100000
 #define NOMINAL 0b01000000
 
-void HMDataCheck(int freq,volatile uint8_t *hmData1,volatile int *count1,volatile int *add1,volatile uint8_t *opMode1);
+
+void HMDataLoop(int freq1, int freq2);
 
 #endif
