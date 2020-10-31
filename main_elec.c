@@ -9,11 +9,12 @@
 #include "avr_lib.h"
 
 volatile uint8_t hmData[18];
-volatile int counter1 = 0;
-volatile int counter2 = 0;
+volatile int timeCounter1 = 0;
+volatile int timeCounter2 = 0;
 uint8_t add = 0, addr = 0;
-volatile int times=0;
-volatile int repeat=0;
+volatile int spiRecCounter=0;
+volatile int uartRecCounter=0;
+volatile int uartTransCounter=0;
 volatile uint8_t temp = 0x00;
 volatile uint8_t opMode;
 volatile uint8_t command;
@@ -37,7 +38,7 @@ int main(void)
 	uartInit();
 	spiInit();
 	i2cInit();
-	/*while(1)
+	while(1)
 	{
 		switch(opMode)
 		{
@@ -72,15 +73,12 @@ int main(void)
 			HMDataLoop(2, 60);
 			break;
 		}
-	}*/
-	HMDataLoop(2, 60);
-	//PORTA = 0x01;
-	return 0;
+	}
 }
 
 ISR(SPI_STC_vect){
 	/*this is the interrupt for SPI communication from the PS4 OP micro controller, switch statement is used to store the data in different variables*/
-	/*command = SPDR;
+	command = SPDR;
 	switch(command){
 		case KILL_COMMAND:
 		opMode = KILL;
@@ -107,43 +105,74 @@ ISR(SPI_STC_vect){
 		SPDR = eepromRandomRead();
 		i2cStop();
 		//ensuring the data gets read to a certain address
-		if(addr == 0x09) times = 0;
-		else times = 5;
+		if(addr == 0x09) spiRecCounter = 0;
+		else spiRecCounter = 5;
 		addr++;
 		break;
 		
-		case TIMESTAMP:*/
-		switch(times){
+		case TIMESTAMP:
+		switch(spiRecCounter){
 			case 0 :
 			hmData[0]=SPDR;
-			times++;
+			spiRecCounter++;
 			break;
 			
 			case 1 :
 			hmData[1]=SPDR;
-			times++;
+			spiRecCounter++;
 			break;
 			
 			case 2 :
 			hmData[2]=SPDR;
-			times++;
+			spiRecCounter++;
 			break;
 			
 			case 3 :
 			hmData[3]=SPDR;
-			times = 0;
+			spiRecCounter = 0;
 			break;
-		//break;
+		break;
 	}
 }
 
 /*These are the external interrupts for various pin statuses that we are including in the HM data, that we are storing in variables*/
 ISR(TIMER1_COMPC_vect){
 	TCNT1 = 0;
-	counter1++;
+	timeCounter1++;
 	PORTA = 0x01;
 	_delay_ms(100);
 	PORTA = 0x00;
+}
+	
+ISR(USART0_RX_vect)
+{
+	/*this is the interrupt for the USART communicstion, for getting the HM data from comm microcontroller*/
+	switch(uartRecCounter){
+		case 0:
+		hmData[4] = UDR0;
+		uartRecCounter++;
+		break;
+		
+		case 1:
+		hmData[16] = UDR0;
+		uartRecCounter++;
+		break;
+		
+		case 2:
+		hmData[17] = UDR0;
+		uartRecCounter = 0;
+		break;
+		
+
+}
+	
+ISR(USART0_TX_vect)
+{
+	/*this is the interrupt for the USART communicstion, for  SENDING the HM data to comm microcontroller*/
+	if(uartTransCounter<18){
+	UDR0 = hmData[uartTransCounter];
+	uartTransCounter++;
+	}
 }
 
 
