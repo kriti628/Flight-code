@@ -8,9 +8,10 @@
 
 extern uint8_t hmData[18];
 extern uint8_t opMode;
-extern int counter1;
-extern int counter2;
+extern int timeCounter1;
+extern int timeCounter2;
 extern uint8_t addr;
+extern int uartTransCounter;
 
 void HMDataLoop(int freq1, int freq2){
 	//setting the pin status variables to their starting value
@@ -22,8 +23,8 @@ void HMDataLoop(int freq1, int freq2){
 	//enabling the external interrupts and enabling global interrupts
 	
 	while(1){
-		if(counter1 == 2){
-			counter1 = 0;
+		if(timeCounter1 == 2){
+			timeCounter1 = 0;
 			
 			adcCheck(0x00,7,42);
 			adcCheck(0x01,8,42);
@@ -34,15 +35,16 @@ void HMDataLoop(int freq1, int freq2){
 			adcCheck(0x06,14,42);
 			adcCheck(0x07,15,42);
 			
-			counter2++ ;
-			PORTC = counter2;
-			_delay_ms(100);
-			PORTC = 0x00;
+			uartTransCounter = 18;
+			UDR0 = 0x04;
+			
+			timeCounter2++ ;
+			
 			}
 			//this is the code that gets executed every minute, and writes the HM data in the EEPROM
-		if (counter2 == 5){	
+		if (timeCounter2 == 5){	
 			//resetting the count variable and starting the i2c connection and sending the data to the EEPROM
-			counter2 = 0;
+			timeCounter2 = 0;
 			if (PE0 == 1 && PE1 == 1) hmData[5] = 0x33;
 			if (PE2 == 1 && PE3 == 1) hmData[6] = 0x33;
 			if (PE4 == 1 && PE5 == 1) hmData[9] = 0x33;
@@ -54,6 +56,9 @@ void HMDataLoop(int freq1, int freq2){
 				eepromWrite(hmData[i]);
 				}
 			i2cStop();
+			
+			uartTransCounter = 0;
+			UDR0 = 0x03;
 			}
 		
 		}
