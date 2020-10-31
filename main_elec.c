@@ -62,6 +62,7 @@ int main(void)
 			break;
 			
 			case PREDEPL:
+			/* execute burner circuit algorithm and check deployment status,  opMode changes to POSTDEPL when deployment is successful */
 			HMDataLoop(2, 4);
 			break;
 			
