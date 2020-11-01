@@ -35,8 +35,12 @@ void HMDataLoop(int freq1, int freq2){
 			adcCheck(0x06,14,42);
 			adcCheck(0x07,15,42);
 			
+			// receive data from comm microcontroller
 			uartTransCounter = 18;
 			UDR0 = 0x04;
+			//check voltage values on comm microcontroller
+			voltageCheck(16, 42);
+			voltageCheck(4,42);
 			
 			timeCounter2++ ;
 			}
