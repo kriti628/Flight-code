@@ -25,6 +25,9 @@ void adcCheck(uint8_t mux, int i, uint8_t idealValue){
 	while(!(ADCSRA & (1<<ADIF)));
 	
 	hmData[i] = ADCH;
-  
-    if(abs(ADCH-idealValue) > 0.5) opMode=EMERGENCY;
+	if(abs(hmData[i]-idealValue) > 0.5) opMode=EMERGENCY;
+	}
+
+void voltageCheck(int i, uint8_t idealValue){
+    if(abs(hmData[i]-idealValue) > 0.5) opMode=EMERGENCY;
 }
