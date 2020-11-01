@@ -39,10 +39,9 @@ void HMDataLoop(int freq1, int freq2){
 			UDR0 = 0x04;
 			
 			timeCounter2++ ;
-			
 			}
-			//this is the code that gets executed every minute, and writes the HM data in the EEPROM
-		if (timeCounter2 == 5){	
+		//this is the code that gets executed every minute, and writes the HM data in the EEPROM
+		if (timeCounter2 == 30){	
 			//resetting the count variable and starting the i2c connection and sending the data to the EEPROM
 			timeCounter2 = 0;
 			if (PE0 == 1 && PE1 == 1) hmData[5] = 0x33;
@@ -56,10 +55,19 @@ void HMDataLoop(int freq1, int freq2){
 				eepromWrite(hmData[i]);
 				}
 			i2cStop();
-			
-			uartTransCounter = 0;
-			UDR0 = 0x03;
 			}
+		if(opMode==NOMINAL){
+			if(timecounter2==15){
+				uartTransCounter= 18;
+				UDR0 = 0x02;	
+				}
+			if(timeCounter2==30){
+				uartTransCounter = 0;
+				UDR0 = 0x03;
+				}
+			}
+			
+		
 		
 		}
 	}
