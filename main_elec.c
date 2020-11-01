@@ -68,6 +68,7 @@ int main(void)
 			
 			case POSTDEPL:
 			HMDataLoop(2, 60);
+			//check HM data from comm and change opMode to NOMINAL
 			break;
 			
 			case NOMINAL:
